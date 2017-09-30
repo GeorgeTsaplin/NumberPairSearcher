@@ -4,13 +4,16 @@ using System.Linq;
 
 namespace NumberPairSearcher
 {
-    /// <summary> Number pairs searcher. This class not Thread Safe! 
+    /// <summary> Number pairs searcher
     /// </summary>
     public class NumberPairSearcher
     {
-        private int[] raw;
-        private IReadOnlyDictionary<int, uint> preparedSource = null;
+        private readonly IReadOnlyDictionary<int, uint> preparedSource;
 
+        /// <summary> Creates new instance of <see cref="NumberPairSearcher"/>.
+        /// May be long running operation because of preprocessing of specified <paramref name="source"/>
+        /// </summary>
+        /// <param name="source">array of numbers</param>
         public NumberPairSearcher(int[] source)
         {
             if (source == null)
@@ -18,13 +21,11 @@ namespace NumberPairSearcher
                 throw new ArgumentNullException(nameof(source));
             }
 
-            this.raw = source;
+            this.preparedSource = Prepare(source);
         }
 
         public IEnumerable<Tuple<int, int>> Search(int target)
         {
-            this.Prepare();
-
             var source = this.preparedSource.ToDictionary(k => k.Key, i => i.Value);
 
             foreach (var key in this.preparedSource.Keys)
@@ -50,16 +51,11 @@ namespace NumberPairSearcher
             }
         }
 
-        public void Prepare()
+        private static Dictionary<int, uint> Prepare(int[] source)
         {
-            if (this.preparedSource != null)
-            {
-                return;
-            }
+            var result = new Dictionary<int, uint>(source.Length);
 
-            var result = new Dictionary<int, uint>(this.raw.Length);
-
-            foreach (var number in this.raw)
+            foreach (var number in source)
             {
                 uint currentAmount;
                 if (result.TryGetValue(number, out currentAmount))
@@ -72,9 +68,7 @@ namespace NumberPairSearcher
                 }
             }
 
-            this.raw = null;
-
-            this.preparedSource = result;
+            return result;
         }
 
         private static Tuple<int, int> CreateOrderedTuple(int arg1, int arg2)
