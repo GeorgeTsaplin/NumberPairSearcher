@@ -23,7 +23,7 @@ namespace NumberPairSearcher.Tests
         public void Search_EmptySource_ShouldReturnEmptyResult()
         {
             // Arrange
-            var target = new NumberPairSearcher(new double[0]);
+            var target = new NumberPairSearcher(new int[0]);
 
             // Act
             var actual = target.Search(100);
@@ -36,7 +36,7 @@ namespace NumberPairSearcher.Tests
         public void Search_SourceHasNoPairs_ShouldReturnEmptyResult()
         {
             // Arrange
-            var target = new NumberPairSearcher(new double[] { 1, 5, 7 });
+            var target = new NumberPairSearcher(new[] { 1, 5, 7 });
 
             // Act
             var actual = target.Search(100);
@@ -49,7 +49,7 @@ namespace NumberPairSearcher.Tests
         public void Search_SourceHasOnePair_ShouldReturnResult()
         {
             // Arrange
-            var target = new NumberPairSearcher(new double[] { 1, 5, 7 });
+            var target = new NumberPairSearcher(new[] { 1, 5, 7 });
 
             // Act
             var actual = target.Search(6);
@@ -62,7 +62,7 @@ namespace NumberPairSearcher.Tests
         public void Search_SourceHasTwoPairs_ShouldReturnResult()
         {
             // Arrange
-            var target = new NumberPairSearcher(new double[] { 1, 5, 7, 2, 4 });
+            var target = new NumberPairSearcher(new[] { 1, 5, 7, 2, 4 });
 
             // Act
             var actual = target.Search(6);
@@ -75,7 +75,7 @@ namespace NumberPairSearcher.Tests
         public void Search_SourceHasDuplicates_ShouldReturnResult()
         {
             // Arrange
-            var target = new NumberPairSearcher(new double[] { 3, 3, 7 });
+            var target = new NumberPairSearcher(new[] { 3, 3, 7 });
 
             // Act
             var actual = target.Search(6);
@@ -88,7 +88,7 @@ namespace NumberPairSearcher.Tests
         public void Search_SourceHasTargetButNoZero_ShouldNotReturnResult()
         {
             // Arrange
-            var target = new NumberPairSearcher(new double[] { 6, 7 });
+            var target = new NumberPairSearcher(new[] { 6, 7 });
 
             // Act
             var actual = target.Search(6);
@@ -101,7 +101,7 @@ namespace NumberPairSearcher.Tests
         public void Search_SourceHasTargetAndZero_ShouldReturnResult()
         {
             // Arrange
-            var target = new NumberPairSearcher(new double[] { 6, 7, 0 });
+            var target = new NumberPairSearcher(new[] { 6, 7, 0 });
 
             // Act
             var actual = target.Search(6);
@@ -114,13 +114,26 @@ namespace NumberPairSearcher.Tests
         public void Search_SourceHasPairWithNegativeNumber_ShouldReturnResult()
         {
             // Arrange
-            var target = new NumberPairSearcher(new double[] { 7, -1 });
+            var target = new NumberPairSearcher(new[] { 7, -1 });
 
             // Act
             var actual = target.Search(6);
 
             // Assert
             actual.ShouldAllBeEquivalentTo(new[] { Tuple.Create(-1, 7) });
+        }
+
+        [TestMethod]
+        public void Search_SourceHasSeveralPairs_ShouldReturnResult()
+        {
+            // Arrange
+            var target = new NumberPairSearcher(new[] { 1, 5, 1, 5, -1, 7, 2, 4 });
+
+            // Act
+            var actual = target.Search(6);
+
+            // Assert
+            actual.ShouldAllBeEquivalentTo(new[] { Tuple.Create(1, 5), Tuple.Create(1, 5), Tuple.Create(-1, 7), Tuple.Create(2, 4) });
         }
     }
 }
