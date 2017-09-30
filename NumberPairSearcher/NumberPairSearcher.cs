@@ -72,8 +72,9 @@ namespace NumberPairSearcher
                 }
             }
 
-            this.preparedSource = result;
             this.raw = null;
+
+            this.preparedSource = result;
         }
 
         private static Tuple<int, int> CreateOrderedTuple(int arg1, int arg2)
